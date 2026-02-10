@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from typing import Any
 from manim import *
 
 # the TracedPath mobjects don't like caching for some reason :(
@@ -43,12 +44,12 @@ class DemoIntro(MovingCameraScene):
     def construct(self):
         # make the mobjects
         dot_1 = Dot(np.array([1, 0, 0]), color=BLUE_E, radius=0.1, z_index=2, sheen_factor=0.8)
-        dot_2 = Dot(np.array([1, 0, 0])@rot(TAU/3), color=BLUE_E, radius=0.1, z_index=2, sheen_factor=0.8)
-        dot_3 = Dot(np.array([1, 0, 0])@rot(2*TAU/3), color=BLUE_E, radius=0.1, z_index=2, sheen_factor=0.8)
+        dot_2 = Dot(np.array([1, 0, 0])@rot(2*TAU/3), color=BLUE_E, radius=0.1, z_index=2, sheen_factor=0.8)
+        dot_3 = Dot(np.array([1, 0, 0])@rot(TAU/3), color=BLUE_E, radius=0.1, z_index=2, sheen_factor=0.8)
 
-        spring_1 = Spring(dot_2.get_center(), dot_3.get_center(), color=WHITE, z_index=0)
-        spring_2 = Spring(dot_1.get_center(), dot_3.get_center(), color=WHITE, z_index=0)
-        spring_3 = Spring(dot_1.get_center(), dot_2.get_center(), color=WHITE, z_index=0)
+        spring_1 = Spring(dot_1.get_center(), dot_2.get_center(), color=WHITE, z_index=0)
+        spring_2 = Spring(dot_2.get_center(), dot_3.get_center(), color=WHITE, z_index=0)
+        spring_3 = Spring(dot_3.get_center(), dot_1.get_center(), color=WHITE, z_index=0)
 
         trace_1 = TracedPath(dot_1.get_center, stroke_color=BLUE, dissipating_time=1.5, stroke_opacity=[0, 1], stroke_width=4, z_index=0)
         trace_2 = TracedPath(dot_2.get_center, stroke_color=BLUE, dissipating_time=1.5, stroke_opacity=[0, 1], stroke_width=4, z_index=0)
@@ -94,12 +95,12 @@ class DemoIntro(MovingCameraScene):
 
         t = ValueTracker(0)
         system.clear_updaters()
-        self.remove(spring_3)
+        self.remove(spring_1)
         dot_1.add_updater(lambda d: d.move_to(pos_r1(t.get_value())))
-        dot_2.add_updater(lambda d: d.move_to(pos_r3(t.get_value())))
-        dot_3.add_updater(lambda d: d.move_to(pos_r2(t.get_value())))
-        spring_1.add_updater(lambda sp: sp.become(Spring(dot_2.get_center(), dot_3.get_center(), color=WHITE, z_index=1)))
-        spring_2.add_updater(lambda sp: sp.become(Spring(dot_1.get_center(), dot_3.get_center(), color=WHITE, z_index=1)))
+        dot_2.add_updater(lambda d: d.move_to(pos_r2(t.get_value())))
+        dot_3.add_updater(lambda d: d.move_to(pos_r3(t.get_value())))
+        spring_2.add_updater(lambda sp: sp.become(Spring(dot_2.get_center(), dot_3.get_center(), color=WHITE, z_index=1)))
+        spring_3.add_updater(lambda sp: sp.become(Spring(dot_3.get_center(), dot_1.get_center(), color=WHITE, z_index=1)))
 
         text_speed_up = Text('Speed X2', color=RED).next_to(Circle(1), UP)
 
