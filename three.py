@@ -72,7 +72,7 @@ class DemoIntro(MovingCameraScene):
         self.play(FadeIn(text_1, shift=RIGHT), run_time=1.5)
         self.wait(5)
 
-        text_2 = Paragraph('The springs are in tension,', 'holding the system', 'in steady state.').scale(1/3.5).next_to(Circle(1), RIGHT)
+        text_2 = Paragraph('The springs are in tension,', 'the system is magically', 'held in steady state.').scale(1/3.5).next_to(Circle(1), RIGHT)
 
         self.play(FadeOut(text_1, shift=RIGHT), run_time=1.5)
         self.play(FadeIn(text_2, shift=RIGHT), run_time=1.5)
